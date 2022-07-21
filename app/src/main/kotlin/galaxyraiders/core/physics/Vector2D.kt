@@ -10,19 +10,25 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   val magnitude: Double
-    get() = INVALID_DOUBLE
+    get() = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
+
+  val sin: Double
+    get() = this.unit.dy
+
+  val cos: Double
+    get() = this.unit.dx
 
   val radiant: Double
-    get() = INVALID_DOUBLE
+    get() = Math.atan(this.sin / this.cos)
 
   val degree: Double
     get() = INVALID_DOUBLE
 
   val unit: Vector2D
-    get() = INVALID_VECTOR
+    get() = this / this.magnitude
 
   val normal: Vector2D
-    get() = INVALID_VECTOR
+    get() = Vector2D(this.dy, -this.dx).unit
 
   operator fun times(scalar: Double): Vector2D {
     return Vector2D(this.dx * scalar, this.dy * scalar)
@@ -33,7 +39,7 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   operator fun times(v: Vector2D): Double {
-    return INVALID_DOUBLE
+    return this.dx * v.dx + this.dy * v.dy
   }
 
   operator fun plus(v: Vector2D): Vector2D {
@@ -45,22 +51,22 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   operator fun unaryMinus(): Vector2D {
-    return INVALID_VECTOR
+    return Vector2D(-this.dx, -this.dy)
   }
 
   operator fun minus(v: Vector2D): Vector2D {
-    return INVALID_VECTOR
+    return Vector2D(this.dx - v.dx, this.dy - v.dy)
   }
 
   fun scalarProject(target: Vector2D): Double {
-    return INVALID_DOUBLE
+    return (target * this) / target.magnitude
   }
 
   fun vectorProject(target: Vector2D): Vector2D {
-    return INVALID_VECTOR
+    return this.scalarProject(target) * target.unit
   }
 }
 
 operator fun Double.times(v: Vector2D): Vector2D {
-  return INVALID_VECTOR
+  return Vector2D(v.dx * this, v.dy * this)
 }
