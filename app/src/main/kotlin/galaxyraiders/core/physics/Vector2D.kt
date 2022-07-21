@@ -12,17 +12,21 @@ data class Vector2D(val dx: Double, val dy: Double) {
   val magnitude: Double
     get() = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
 
-  val sin: Double
-    get() = this.unit.dy
-
-  val cos: Double
-    get() = this.unit.dx
-
   val radiant: Double
-    get() = Math.atan(this.sin / this.cos)
+    get() {
+      val tan = this.dy / this.dx
+      val ang = when (this.dx > 0) {
+        true -> Math.atan(tan)
+        else -> when (this.dy > 0) {
+          true -> Math.atan(tan) + Math.PI
+          else -> Math.atan(tan) - Math.PI
+        }
+      }
+      return ang
+    }
 
   val degree: Double
-    get() = INVALID_DOUBLE
+    get() = Math.toDegrees(this.radiant)
 
   val unit: Vector2D
     get() = this / this.magnitude
