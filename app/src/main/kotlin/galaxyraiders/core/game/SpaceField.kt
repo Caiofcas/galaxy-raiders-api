@@ -8,6 +8,10 @@ import galaxyraiders.ports.RandomGenerator
 object SpaceFieldConfig {
   private val config = Config(prefix = "GR__CORE__GAME__SPACE_FIELD__")
 
+  val explosionRadius = config.get<Double>("EXPLOSION_RADIUS")
+  val explosionSpeed = config.get<Double>("EXPLOSION_SPEED")
+  val explosionMass = config.get<Double>("EXPLOSION_MASS")
+
   val missileRadius = config.get<Double>("MISSILE_RADIUS")
   val missileMass = config.get<Double>("MISSILE_MASS")
   val missileDistanceFromShip = config.get<Double>("MISSILE_DISTANCE_FROM_SHIP")
@@ -35,8 +39,11 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
   var missiles: List<Missile> = emptyList()
     private set
 
+  var explosions: List<Explosion> = emptyList()
+    private set
+
   val spaceObjects: List<SpaceObject>
-    get() = listOf(ship) + asteroids + missiles
+    get() = listOf(ship) + asteroids + missiles + explosions
 
   fun generateAsteroid() {
     asteroids += createAsteroidWithRandomProperties()
@@ -44,6 +51,10 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
 
   fun generateMissile() {
     missiles += createMissile()
+  }
+
+  fun generateExplosion(position: Point2D) {
+    explosions += createExplosion(position)
   }
 
   private fun initializeShip(): SpaceShip {
@@ -69,6 +80,15 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
       initialVelocity = defineMissileVelocity(),
       radius = SpaceFieldConfig.missileRadius,
       mass = SpaceFieldConfig.missileMass,
+    )
+  }
+
+  private fun createExplosion(position: Point2D): Explosion {
+    return Explosion(
+      initialPosition = position,
+      initialVelocity = Vector2D(0.0,0.0),
+      radius = SpaceFieldConfig.explosionRadius,
+      mass = SpaceFieldConfig.explosionMass,
     )
   }
 
