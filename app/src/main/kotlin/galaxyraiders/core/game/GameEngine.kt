@@ -91,8 +91,10 @@ class GameEngine(
         (first, second) ->
       if (first.impacts(second)) {
         first.collideWith(second, GameEngineConfig.coefficientRestitution)
-        if ((first.type == "Missile" && second.type == "Asteroid") ||
-            (second.type == "Missile" && first.type == "Asteroid")) {
+        if (first.type == "Missile" && second.type == "Asteroid") {
+          this.field.generateExplosion(second.center)
+        }
+        if (second.type == "Missile" && first.type == "Asteroid") {
           this.field.generateExplosion(first.center)
         }
       }

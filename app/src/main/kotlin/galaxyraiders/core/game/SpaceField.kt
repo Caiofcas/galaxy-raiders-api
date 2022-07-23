@@ -86,7 +86,7 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
   private fun createExplosion(position: Point2D): Explosion {
     return Explosion(
       initialPosition = position,
-      initialVelocity = Vector2D(0.0,0.0),
+      initialVelocity = Vector2D(0.0, 0.0),
       radius = SpaceFieldConfig.explosionRadius,
       mass = SpaceFieldConfig.explosionMass,
     )
