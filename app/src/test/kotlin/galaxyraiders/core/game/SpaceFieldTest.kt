@@ -129,6 +129,26 @@ class SpaceFieldTest {
     assertEquals(numAsteroids + 1, spaceField.asteroids.size)
   }
 
+  @Test
+  fun `it handles explosions correctly`() {
+    spaceField.generateMissile()
+    spaceField.generateAsteroid()
+    val m = spaceField.missiles.first()
+    spaceField.generateExplosion(
+      m,
+      spaceField.asteroids.first()
+    )
+    val e = spaceField.explosions.first()
+
+    assertAll(
+      "SpaceField should initialize explosion where missile was",
+      { assertEquals(spaceField.explosions.size, 1) },
+      { assertEquals(spaceField.missiles.size, 0) },
+      { assertEquals(spaceField.asteroids.size, 0) },
+      { assertEquals(e.center, m.center) },
+    )
+  }
+
   @ParameterizedTest(name = "({0})")
   @MethodSource("provideSpaceFieldWithCornerCaseGeneratorArguments")
   fun `it generates a new asteroid in a random horizontal position at the top of the field `(spaceField: SpaceField) {
